@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <font size="3"><b>Member Search</b></font>
+    <br><br>
+    <form method="GET" action="/members/search">
+    <table border="0" cellpadding="4" cellspacing="0">
+    <tr>
+      <td><font size="2">Member ID or Name:</font></td>
+      <td><input type="text" name="q" value="{{ query }}" size="30" style="padding: 4px;"></td>
+      <td><input type="submit" value="Search"
+                 style="padding: 4px 16px; background: #003366; color: white; border: 1px solid #002244; cursor: pointer;"></td>
+    </tr>
+    </table>
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    {% if query %}
+    <br>
+    <table width="100%" border="1" cellpadding="6" cellspacing="0" bordercolor="#CCCCCC"
+           style="background: #FFFFFF;">
+    <tr bgcolor="#E8E8E8">
+      <td><font size="2"><b>Member ID</b></font></td>
+      <td><font size="2"><b>Name</b></font></td>
+      <td><font size="2"><b>SSN (Last 4)</b></font></td>
+      <td><font size="2"><b>Phone</b></font></td>
+      <td><font size="2"><b>Actions</b></font></td>
+    </tr>
+    {% if results %}
+      {% for member in results %}
+      <tr>
+        <td><font size="2">{{ member.member_id }}</font></td>
+        <td><font size="2">{{ member.full_name }}</font></td>
+        <td><font size="2">***-**-{{ member.ssn_last4 }}</font></td>
+        <td><font size="2">{{ member.phone }}</font></td>
+        <td><font size="2"><a href="/members/{{ member.member_id }}">View Details</a></font></td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="5" align="center" style="padding: 20px;">
+          <font size="2" color="#CC0000">No members found matching "{{ query }}"</font>
+        </td>
+      </tr>
+    {% endif %}
+    </table>
+    <br>
+    <font size="2" color="#666666">{{ results|length }} result(s) found</font>
+    {% endif %}
+  </td>
+</tr>
+</table>
+{% endblock %}

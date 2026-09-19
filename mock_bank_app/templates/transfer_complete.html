@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <table width="100%" border="0" bgcolor="#EEFFEE" style="border: 1px solid #00AA00;">
+    <tr><td style="padding: 16px;" align="center">
+      <font size="3" color="#006600"><b>Transfer Completed Successfully</b></font>
+      <br><br>
+      <font size="2">Confirmation Number: <b>{{ confirmation_number }}</b></font>
+    </td></tr>
+    </table>
+    <br>
+    <table border="0" cellpadding="4" cellspacing="0" align="center">
+    <tr>
+      <td>
+        <a href="/members/{{ member.member_id }}"
+           style="padding: 8px 16px; background: #003366; color: white; text-decoration: none;">
+          Return to Member</a>
+      </td>
+      <td>&nbsp;&nbsp;</td>
+      <td>
+        <a href="/dashboard"
+           style="padding: 8px 16px; background: #666666; color: white; text-decoration: none;">
+          Back to Dashboard</a>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+</table>
+{% endblock %}

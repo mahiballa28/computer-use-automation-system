@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <table width="100%" border="0" bgcolor="#FFEEEE" style="border: 1px solid #CC0000;">
+    <tr><td style="padding: 16px;">
+      <font size="3" color="#CC0000"><b>{{ error_title }}</b></font>
+      <br><br>
+      <font size="2">{{ error_message }}</font>
+      <br><br>
+      <font size="1" color="#999999">Error Code: {{ error_code }}</font>
+    </td></tr>
+    </table>
+    <br>
+    <font size="2"><a href="/dashboard">Return to Dashboard</a></font>
+  </td>
+</tr>
+</table>
+{% endblock %}

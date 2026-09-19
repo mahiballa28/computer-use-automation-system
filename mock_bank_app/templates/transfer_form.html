@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td>
+    <font size="2"><a href="/members/{{ member.member_id }}">&laquo; Back to Member Detail</a></font>
+  </td>
+</tr>
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <font size="3"><b>Internal Transfer — {{ member.full_name }} ({{ member.member_id }})</b></font>
+    <br><br>
+
+    {% if error %}
+    <table width="100%" border="0" bgcolor="#FFEEEE" style="border: 1px solid #CC0000; margin-bottom: 12px;">
+    <tr><td style="padding: 8px;"><font color="#CC0000" size="2">{{ error }}</font></td></tr>
+    </table>
+    {% endif %}
+
+    <form method="POST" action="/members/{{ member.member_id }}/transfer">
+    <table border="0" cellpadding="6" cellspacing="0" width="100%">
+    <tr>
+      <td width="180"><font size="2">Source Account:</font></td>
+      <td>
+        <select name="from_acct" style="padding: 4px; width: 300px;">
+          <option value="">-- Select Source --</option>
+          {% for acct in member.accounts %}
+            {% if acct.status == "Active" %}
+            <option value="{{ acct.account_id }}"
+                    {% if request.args.get('from_acct') == acct.account_id %}selected{% endif %}>
+              {{ acct.account_id }} - {{ acct.account_type }} (${{ "{:,.2f}".format(acct.balance) }})
+            </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><font size="2">Destination Account:</font></td>
+      <td>
+        <select name="to_acct" style="padding: 4px; width: 300px;">
+          <option value="">-- Select Destination --</option>
+          {% for acct in member.accounts %}
+            {% if acct.status == "Active" %}
+            <option value="{{ acct.account_id }}">
+              {{ acct.account_id }} - {{ acct.account_type }} (${{ "{:,.2f}".format(acct.balance) }})
+            </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><font size="2">Transfer Amount ($):</font></td>
+      <td>
+        <input type="text" name="amount" size="15" style="padding: 4px; text-align: right;"
+               placeholder="0.00">
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td style="padding-top: 12px;">
+        <input type="submit" value="Continue to Confirmation"
+               style="padding: 8px 24px; background: #003366; color: white; border: 1px solid #002244; cursor: pointer;">
+        &nbsp;
+        <a href="/members/{{ member.member_id }}" style="font-size: 12px;">Cancel</a>
+      </td>
+    </tr>
+    </table>
+    </form>
+  </td>
+</tr>
+</table>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <font size="3"><b>Confirm Transfer</b></font>
+    <br><br>
+
+    <table width="100%" border="0" bgcolor="#FFFFF0" style="border: 1px solid #CCCC00; padding: 8px;">
+    <tr><td style="padding: 8px;">
+      <font size="2" color="#996600"><b>Please review the transfer details carefully before confirming.</b></font>
+    </td></tr>
+    </table>
+    <br>
+
+    <table border="0" cellpadding="6" cellspacing="0" width="60%"
+           style="background: #F8F8F8; border: 1px solid #DDDDDD;">
+    <tr>
+      <td width="180"><font size="2" color="#666666">Member:</font></td>
+      <td><font size="2"><b>{{ member.full_name }} ({{ member.member_id }})</b></font></td>
+    </tr>
+    <tr>
+      <td><font size="2" color="#666666">From:</font></td>
+      <td><font size="2">{{ from_acct.account_id }} — {{ from_acct.account_type }}</font></td>
+    </tr>
+    <tr>
+      <td><font size="2" color="#666666">To:</font></td>
+      <td><font size="2">{{ to_acct.account_id }} — {{ to_acct.account_type }}</font></td>
+    </tr>
+    <tr>
+      <td><font size="2" color="#666666">Amount:</font></td>
+      <td><font size="2"><b>${{ "{:,.2f}".format(transfer.amount) }}</b></font></td>
+    </tr>
+    </table>
+    <br>
+
+    <form method="POST" action="/members/{{ member.member_id }}/transfer/confirm">
+    <table border="0" cellpadding="4" cellspacing="0">
+    <tr>
+      <td>
+        <input type="submit" value="Confirm Transfer"
+               style="padding: 8px 24px; background: #CC6600; color: white; border: 1px solid #AA5500; cursor: pointer; font-weight: bold;">
+        &nbsp;&nbsp;
+        <a href="/members/{{ member.member_id }}/transfer"
+           style="font-size: 12px; color: #666666;">Go Back</a>
+      </td>
+    </tr>
+    </table>
+    </form>
+  </td>
+</tr>
+</table>
+{% endblock %}

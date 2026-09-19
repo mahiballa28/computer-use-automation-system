@@ -1,0 +1,283 @@
+# Capability: Look up a credit union member and read their savings balance
+#
+# Recorded from discovery run against the Meridian Credit Union mock banking app.
+# This artifact can be replayed deterministically without the LLM.
+#
+# Contract:
+#   Input:  member_id (string, pattern: M followed by 4 digits)
+#   Output: member_name (string), savings_balance (string)
+#
+# Error handling:
+#   - member_not_found → BUSINESS_OUTCOME (not a failure)
+#   - session_expired  → ESCALATE to human
+#   - permission_denied → BUSINESS_OUTCOME
+
+id: cap-lookup-balance-001
+version: 1
+name: lookup_member_balance
+description: Look up a member by ID and read their savings balance
+
+surface:
+  surface_type: web
+  entry_point: http://localhost:5001
+  app_id: meridian-core-banking
+  tenant_id: null
+  app_version: '4.2.1'
+
+input_parameters:
+  - name: member_id
+    type: string
+    description: Credit union member ID (e.g. M1001)
+    required: true
+    sensitive: false
+    validation_pattern: '^M\d{4}$'
+
+outputs:
+  - name: member_name
+    type: string
+    description: Full name of the member
+    extraction_step_id: step_06
+    sensitive: false
+  - name: savings_balance
+    type: string
+    description: Current savings account balance
+    extraction_step_id: step_07
+    sensitive: true
+
+steps:
+  # --- Login ---
+  - id: step_00
+    description: Type operator username into the login field
+    action: type
+    target:
+      description: Username input field on the login page
+      strategies:
+        - type: accessibility
+          value: "textbox[name='Username:']"
+          attributes:
+            role: textbox
+            name: 'Username:'
+          confidence: 0.90
+        - type: label_proximity
+          value: 'Username:'
+          confidence: 0.70
+    parameters:
+      text: operator
+    timeout_ms: 5000
+    risk_level: cautious
+    on_error: fail
+
+  - id: step_01
+    description: Click the Sign In button to log in
+    action: click
+    target:
+      description: Sign In submit button
+      strategies:
+        - type: accessibility
+          value: "button[name='Sign In']"
+          attributes:
+            role: button
+            name: Sign In
+          confidence: 0.95
+        - type: text_content
+          value: Sign In
+          confidence: 0.80
+    checkpoint:
+      description: Dashboard page loads after login
+      type: text_present
+      value: Welcome
+      timeout_ms: 5000
+    timeout_ms: 10000
+    risk_level: safe
+    on_error: fail
+
+  # --- Navigate to search ---
+  - id: step_02
+    description: Click Member Search link in the navigation menu
+    action: click
+    target:
+      description: Member Search navigation link
+      strategies:
+        - type: accessibility
+          value: "link[name='Member Search']"
+          attributes:
+            role: link
+            name: Member Search
+          confidence: 0.90
+        - type: text_content
+          value: Member Search
+          confidence: 0.80
+    checkpoint:
+      description: Search page loads
+      type: text_present
+      value: Member ID or Name
+      timeout_ms: 5000
+    timeout_ms: 10000
+    risk_level: safe
+    on_error: fail
+
+  # --- Search for member ---
+  - id: step_03
+    description: Type the member ID into the search field
+    action: type
+    target:
+      description: Member ID search input field
+      strategies:
+        - type: accessibility
+          value: "textbox[name='Member ID or Name:']"
+          attributes:
+            role: textbox
+            name: 'Member ID or Name:'
+          confidence: 0.90
+        - type: label_proximity
+          value: 'Member ID or Name:'
+          confidence: 0.70
+    parameters:
+      text: '{{member_id}}'
+    timeout_ms: 5000
+    risk_level: cautious
+    on_error: fail
+
+  - id: step_04
+    description: Click the Search button to find the member
+    action: click
+    target:
+      description: Search submit button
+      strategies:
+        - type: accessibility
+          value: "button[name='Search']"
+          attributes:
+            role: button
+            name: Search
+          confidence: 0.95
+        - type: text_content
+          value: Search
+          confidence: 0.80
+    checkpoint:
+      description: Search results appear
+      type: text_present
+      value: 'result(s) found'
+      timeout_ms: 5000
+    timeout_ms: 10000
+    risk_level: safe
+    on_error: fail
+    error_handlers:
+      - name: member_not_found
+        description: Search returns no results
+        detection:
+          description: No results message is visible
+          type: text_present
+          value: No members found
+          timeout_ms: 3000
+        action: report_outcome
+        message_template: 'No member found matching ID: {{member_id}}'
+        max_retries: 1
+
+  # --- View member detail ---
+  - id: step_05
+    description: Click View Details link to open the member's profile
+    action: click
+    target:
+      description: View Details link in the search results table
+      strategies:
+        - type: accessibility
+          value: "link[name='View Details']"
+          attributes:
+            role: link
+            name: View Details
+          confidence: 0.85
+        - type: text_content
+          value: View Details
+          confidence: 0.75
+    checkpoint:
+      description: Member detail page loads
+      type: text_present
+      value: Member Detail
+      timeout_ms: 5000
+    timeout_ms: 10000
+    risk_level: safe
+    on_error: fail
+
+  # --- Extract data ---
+  - id: step_06
+    description: Extract the member's full name from the detail page
+    action: extract
+    target: null
+    parameters:
+      output_name: member_name
+    timeout_ms: 5000
+    risk_level: safe
+    on_error: fail
+
+  - id: step_07
+    description: Extract the savings account balance
+    action: extract
+    target: null
+    parameters:
+      output_name: savings_balance
+    timeout_ms: 5000
+    risk_level: safe
+    on_error: fail
+
+success_condition:
+  description: Member detail page with account information is displayed
+  type: text_present
+  value: Member Detail
+  timeout_ms: 5000
+
+# --- Error handlers (capability-level) ---
+error_handlers:
+  - name: member_not_found
+    description: Member search returns no results for the given ID
+    detection:
+      description: No results message is visible on the search page
+      type: text_present
+      value: No members found
+      timeout_ms: 3000
+    action: report_outcome
+    message_template: 'Member not found for ID: {{member_id}}'
+    max_retries: 1
+
+  - name: session_expired
+    description: Session has timed out, user is redirected to login
+    detection:
+      description: Login page with session expired message
+      type: text_present
+      value: Session expired
+      timeout_ms: 3000
+    action: escalate
+    message_template: Session expired during capability execution — human intervention required
+    max_retries: 1
+
+  - name: permission_denied
+    description: Operator does not have permission to view this member
+    detection:
+      description: Access denied error page
+      type: text_present
+      value: Access Denied
+      timeout_ms: 3000
+    action: report_outcome
+    message_template: Permission denied when accessing member {{member_id}}
+    max_retries: 1
+
+  - name: processing_error
+    description: Server returned an unexpected error
+    detection:
+      description: Processing error page
+      type: text_present
+      value: Processing Error
+      timeout_ms: 3000
+    action: fail
+    message_template: Server processing error encountered
+    max_retries: 1
+
+approval_state: draft
+confidence: null
+created_at: '2026-09-19T00:00:00+00:00'
+updated_at: '2026-09-19T00:00:00+00:00'
+recorded_from_run_id: null
+base_capability_id: null
+tags:
+  - member-services
+  - read-only
+  - balance-inquiry

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td>
+    <font size="2"><a href="/members/search">&laquo; Back to Search</a></font>
+  </td>
+</tr>
+<tr>
+  <td bgcolor="#FFFFFF" style="border: 1px solid #CCCCCC; padding: 16px;">
+    <font size="3"><b>Member Detail — {{ member.member_id }}</b></font>
+    <br><br>
+
+    <!-- Member info in nested tables (intentionally legacy) -->
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+    <tr>
+      <td width="50%" valign="top">
+        <table border="0" cellpadding="3" cellspacing="0">
+        <tr>
+          <td><font size="2" color="#666666">Name:</font></td>
+          <td><font size="2"><b>{{ member.full_name }}</b></font></td>
+        </tr>
+        <tr>
+          <td><font size="2" color="#666666">Member ID:</font></td>
+          <td><font size="2">{{ member.member_id }}</font></td>
+        </tr>
+        <tr>
+          <td><font size="2" color="#666666">SSN:</font></td>
+          <td><font size="2">***-**-{{ member.ssn_last4 }}</font></td>
+        </tr>
+        </table>
+      </td>
+      <td width="50%" valign="top">
+        <table border="0" cellpadding="3" cellspacing="0">
+        <tr>
+          <td><font size="2" color="#666666">Phone:</font></td>
+          <td><font size="2">{{ member.phone }}</font></td>
+        </tr>
+        <tr>
+          <td><font size="2" color="#666666">Email:</font></td>
+          <td><font size="2">{{ member.email }}</font></td>
+        </tr>
+        <tr>
+          <td><font size="2" color="#666666">Address:</font></td>
+          <td><font size="2">{{ member.address }}</font></td>
+        </tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td>
+    <br>
+    <font size="3"><b>Accounts</b></font>
+    <br><br>
+    <table width="100%" border="1" cellpadding="8" cellspacing="0" bordercolor="#CCCCCC"
+           style="background: #FFFFFF;">
+    <tr bgcolor="#E8E8E8">
+      <td><font size="2"><b>Account ID</b></font></td>
+      <td><font size="2"><b>Type</b></font></td>
+      <td><font size="2"><b>Balance</b></font></td>
+      <td><font size="2"><b>Status</b></font></td>
+      <td><font size="2"><b>Actions</b></font></td>
+    </tr>
+    {% for account in member.accounts %}
+    <tr>
+      <td><font size="2">{{ account.account_id }}</font></td>
+      <td><font size="2">{{ account.account_type }}</font></td>
+      <td align="right"><font size="2"><b>${{ "{:,.2f}".format(account.balance) }}</b></font></td>
+      <td><font size="2">{{ account.status }}</font></td>
+      <td><font size="2">
+        {% if account.status == "Active" %}
+        <a href="/members/{{ member.member_id }}/transfer?from_acct={{ account.account_id }}">Transfer</a>
+        {% else %}
+        <font color="#999999">N/A</font>
+        {% endif %}
+      </font></td>
+    </tr>
+    {% endfor %}
+    </table>
+  </td>
+</tr>
+</table>
+{% endblock %}

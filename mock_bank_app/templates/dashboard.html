@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+<tr>
+  <td><font size="3"><b>Welcome, {{ username }}</b></font></td>
+</tr>
+<tr>
+  <td>
+    <table width="100%" border="1" cellpadding="12" cellspacing="0" bordercolor="#CCCCCC"
+           style="background: #FFFFFF;">
+    <tr>
+      <td width="33%" valign="top">
+        <table border="0" cellpadding="4">
+        <tr><td><font size="2"><b>Member Services</b></font></td></tr>
+        <tr><td><font size="2"><a href="/members/search">Search Members</a></font></td></tr>
+        <tr><td><font size="2" color="#999999">New Member Enrollment</font></td></tr>
+        <tr><td><font size="2" color="#999999">Member Documents</font></td></tr>
+        </table>
+      </td>
+      <td width="33%" valign="top">
+        <table border="0" cellpadding="4">
+        <tr><td><font size="2"><b>Account Operations</b></font></td></tr>
+        <tr><td><font size="2" color="#999999">Open New Account</font></td></tr>
+        <tr><td><font size="2" color="#999999">Close Account</font></td></tr>
+        <tr><td><font size="2" color="#999999">Account Maintenance</font></td></tr>
+        </table>
+      </td>
+      <td width="33%" valign="top">
+        <table border="0" cellpadding="4">
+        <tr><td><font size="2"><b>Reports</b></font></td></tr>
+        <tr><td><font size="2" color="#999999">Daily Transaction Log</font></td></tr>
+        <tr><td><font size="2" color="#999999">Audit Trail</font></td></tr>
+        <tr><td><font size="2" color="#999999">Regulatory Reports</font></td></tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+</table>
+{% endblock %}
