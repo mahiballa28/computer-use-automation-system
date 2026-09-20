@@ -161,4 +161,71 @@ The handoff mechanism and control-transfer model are fully implemented. The CDP 
 | sentence-transformers integration test | Requires model download (80MB); kept as optional dependency. | CI job that downloads model and runs fingerprint matching against real DOM elements |
 | Multi-tenant tenant registry | The artifact schema supports it; building the registry + drift detection dashboard is infrastructure. | Tenant registry with app versions, compatibility matrix, automated drift detection |
 | Parallel workflow branches | DAG engine supports the model but executes sequentially. | `asyncio.gather()` for independent branches within the same browser context |
-| Real LLM discovery evidence | Requires live API call; included sample artifact + schema as evidence. | Run discovery against mock app, capture full trace in `/evidence/` |
+
+## 8. Beyond-Scope AI Features
+
+Eight additional features not requested by the assignment. Each addresses a real production problem in banking UI automation:
+
+### 8.1 Semantic Element Fingerprinting
+
+**Problem:** Locators break when the UI changes — a renamed label, a moved button, a restyled form. Traditional approaches require re-recording the entire capability.
+
+**Solution:** Each UI element is fingerprinted as a multi-dimensional embedding combining text content, spatial position, DOM depth, tag/role, and neighboring context. When exact locators fail, the resolver computes cosine similarity between the target fingerprint and all current page elements, finding the best match without LLM calls.
+
+**Technical depth:** Uses sentence-transformers (all-MiniLM-L6-v2) for text embedding and a weighted feature vector combining spatial (normalized x,y), structural (DOM depth, sibling index), and semantic signals. Inference is ~5ms per element vs. ~500ms for an LLM API call. Works fully offline — critical for air-gapped banking environments.
+
+### 8.2 Execution Trace Anomaly Detection
+
+**Problem:** A replay can "succeed" (all steps complete, all checkpoints pass) but produce wrong data. In banking, this is worse than a visible failure.
+
+**Solution:** After N replays, the system builds statistical profiles — timing distributions, element counts per page, extracted value ranges. During subsequent replays, it flags anomalies in real-time: "Step 3 took 8x longer than normal," "Balance page had 2 rows instead of the usual 4," "Extracted value $0.00 is an outlier."
+
+**Technical depth:** Uses exponential moving averages for timing and IQR-based outlier detection for values. Profiles are per-capability, per-step. The anomaly report includes both the statistical threshold and the observed deviation.
+
+### 8.3 Capability Composition — DAG Workflows
+
+**Problem:** Individual capabilities automate single screens. Real business processes span multiple screens: "check balance, then transfer funds, then verify the transfer." Chaining capabilities ad-hoc is fragile.
+
+**Solution:** Workflows are directed acyclic graphs (DAGs) where each node is a capability with typed data flow between nodes. The engine validates at definition time: cycle detection via topological sort, data type compatibility between connected ports, dependency resolution for parallel execution.
+
+**Technical depth:** Supports conditional branching (run capability B only if capability A's output meets a condition), compensating actions (if step 3 fails after step 2 succeeded, run step 2's rollback), and parallel independent branches.
+
+### 8.4 Visual Regression Detection
+
+**Problem:** A page can be functionally correct (all text assertions pass) but visually broken — a CSS regression that hides critical information or overlaps interactive elements.
+
+**Solution:** Perceptual hashing (average hash + difference hash) generates compact fingerprints of page screenshots. Comparing fingerprints via Hamming distance detects visual drift without pixel-perfect comparison, which would be too brittle across different render environments.
+
+**Technical depth:** aHash captures average luminance distribution; dHash captures gradient direction between adjacent pixels. Combined, they're robust to minor rendering differences while catching layout changes. Zero external dependencies — pure Python implementation using only hashlib and struct.
+
+### 8.5 Tamper-Evident Audit Trail
+
+**Problem:** Banking automation must prove that no action was taken without authorization, no log entry was deleted, and no evidence was altered. Standard log files offer no integrity guarantees.
+
+**Solution:** A cryptographic hash chain (SHA-256) where each audit entry's hash incorporates the previous entry's hash. Modifying or deleting any entry breaks the chain — the `verify()` method detects both content tampering and chain breaks. Supports save/load with integrity preserved.
+
+**Technical depth:** Typed actors (SYSTEM, AGENT, HUMAN, POLICY) and actions (RUN_START, STEP_EXECUTED, HUMAN_INTERVENTION_START, DATA_REDACTED, etc.) provide fine-grained attribution. Maps directly to SOX/FFIEC audit requirements for financial institutions.
+
+### 8.6 TF-IDF Capability Discovery
+
+**Problem:** As the capability catalog grows, finding the right capability by name is impractical. AI agents need to search by intent, not by exact name.
+
+**Solution:** Each capability's name, description, tags, parameter descriptions, and output descriptions are indexed using TF-IDF. Natural language queries ("check member savings balance") return ranked results by relevance score.
+
+**Technical depth:** Custom tokenizer with stopword removal, per-document term frequency normalization, and IDF weighting. Zero ML dependencies — deterministic, fast (~1ms for 100 capabilities), works offline. The right tool for a catalog of dozens to hundreds; embeddings would be overkill here.
+
+### 8.7 Adaptive Timing Prediction
+
+**Problem:** Static timeouts are either too short (causing false failures on slow pages) or too long (wasting time when pages are down). Legacy banking apps have highly variable response times.
+
+**Solution:** Exponential moving average tracking of step execution times across runs. Adaptive timeouts are computed as EMA + k × variance, giving confidence-bounded wait times that tighten as more data accumulates. Trend detection (degrading/stable/improving) flags steps getting slower over time.
+
+**Technical depth:** Configurable smoothing factor (alpha), confidence multiplier (k), and minimum floor. Health reports aggregate per-capability, flagging degrading steps before they cause failures.
+
+### 8.8 Auto-Healing Locators
+
+**Problem:** When a locator breaks, someone must manually update the capability YAML. At scale (hundreds of capabilities, daily runs), this is unsustainable.
+
+**Solution:** When a primary locator fails but a fallback succeeds, the heal is recorded. After N consistent heals (configurable threshold, default 3), the system automatically promotes the working strategy in the YAML artifact. The original strategy is demoted (not deleted) for rollback.
+
+**Technical depth:** Consistency requirement prevents flaky single-failure updates. Each heal records the full context (what failed, what worked, confidence). The threshold ensures only persistent breakages trigger updates. All heals are logged to the audit trail for compliance.

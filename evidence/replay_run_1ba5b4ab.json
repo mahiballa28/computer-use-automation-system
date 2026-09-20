@@ -1,0 +1,143 @@
+{
+  "run_id": "1ba5b4ab-bcdd-462d-983e-4301240fabda",
+  "capability_id": "cap-lookup-balance-001",
+  "events": [
+    {
+      "event": "replay_start",
+      "timestamp": "2026-09-20T05:30:06.946958+00:00",
+      "capability": "lookup_member_balance",
+      "params": [
+        "member_id"
+      ]
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_00",
+      "action": "type",
+      "description": "Type operator username into the login field",
+      "timestamp": "2026-09-20T05:30:19.468973+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_00",
+      "success": true,
+      "duration_ms": 7027.61697769165,
+      "timestamp": "2026-09-20T05:30:26.497814+00:00",
+      "strategy": "label_proximity"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_01",
+      "action": "click",
+      "description": "Click the Sign In button to log in",
+      "timestamp": "2026-09-20T05:30:38.503316+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_01",
+      "success": true,
+      "duration_ms": 570.3837871551514,
+      "timestamp": "2026-09-20T05:30:39.085057+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_02",
+      "action": "click",
+      "description": "Click Member Search link in the navigation menu",
+      "timestamp": "2026-09-20T05:30:51.091802+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_02",
+      "success": true,
+      "duration_ms": 564.5198822021484,
+      "timestamp": "2026-09-20T05:30:51.667450+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_03",
+      "action": "type",
+      "description": "Type the member ID into the search field",
+      "timestamp": "2026-09-20T05:31:03.673693+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_03",
+      "success": true,
+      "duration_ms": 7012.627840042114,
+      "timestamp": "2026-09-20T05:31:10.687706+00:00",
+      "strategy": "label_proximity"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_04",
+      "action": "click",
+      "description": "Click the Search button to find the member",
+      "timestamp": "2026-09-20T05:31:25.697101+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_04",
+      "success": true,
+      "duration_ms": 566.8840408325195,
+      "timestamp": "2026-09-20T05:31:26.274779+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_05",
+      "action": "click",
+      "description": "Click View Details link to open the member's profile",
+      "timestamp": "2026-09-20T05:31:38.279858+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_05",
+      "success": true,
+      "duration_ms": 565.241813659668,
+      "timestamp": "2026-09-20T05:31:38.855816+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_06",
+      "action": "extract",
+      "description": "Extract the member's full name from the detail page",
+      "timestamp": "2026-09-20T05:31:50.861058+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_06",
+      "success": true,
+      "duration_ms": 12.626886367797852,
+      "timestamp": "2026-09-20T05:31:50.874702+00:00",
+      "strategy": null
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_07",
+      "action": "extract",
+      "description": "Extract the savings account balance",
+      "timestamp": "2026-09-20T05:32:02.881156+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_07",
+      "success": true,
+      "duration_ms": 2.4268627166748047,
+      "timestamp": "2026-09-20T05:32:02.884306+00:00",
+      "strategy": null
+    },
+    {
+      "event": "run_complete",
+      "status": "success",
+      "timestamp": "2026-09-20T05:32:02.885769+00:00",
+      "outputs": [
+        "member_name",
+        "savings_balance"
+      ]
+    }
+  ]
+}

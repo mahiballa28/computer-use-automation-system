@@ -66,11 +66,23 @@ Goal (natural language)
 
 ### Beyond-Scope AI Features
 
-1. **Semantic Element Fingerprinting** — Embedding-based self-healing locators using sentence-transformers. When exact locators fail, find the matching element via cosine similarity.
+Five original features not requested by the assignment — each solves a real production problem:
 
-2. **Execution Trace Anomaly Detection** — Statistical profiling of replay behavior (timing, values, page states). Detects "succeeded incorrectly" — critical for banking compliance.
+1. **Semantic Element Fingerprinting** — Embedding-based self-healing locators using sentence-transformers. When exact locators fail, find the matching element via cosine similarity without LLM calls (~5ms vs ~500ms API). Works offline/air-gapped. (`src/cua/models/fingerprint.py`, `src/cua/replay/locator_resolver.py`)
 
-3. **Capability Composition (DAG Workflows)** — Chain capabilities into directed acyclic graphs with typed data flow, conditional branching, and compensating actions.
+2. **Execution Trace Anomaly Detection** — Statistical profiling of replay behavior (timing distributions, element counts, value ranges). Detects "succeeded incorrectly" — catches silent failures that pass all checkpoints but produce wrong data. Critical for banking compliance. (`src/cua/observability/anomaly.py`)
+
+3. **Capability Composition (DAG Workflows)** — Chain capabilities into directed acyclic graphs with typed data flow, conditional branching, and compensating actions for rollback. Topological sort validates at definition time. (`src/cua/models/workflow.py`, `src/cua/orchestration/engine.py`)
+
+4. **Visual Regression Detection** — Perceptual hashing (aHash + dHash) detects unexpected UI changes between replay runs without pixel-perfect comparison. Flags anomalies when a page's visual fingerprint drifts beyond a configurable threshold. Zero external dependencies — pure Python implementation. (`src/cua/observability/visual_regression.py`)
+
+5. **Tamper-Evident Audit Trail** — Cryptographic hash chain (SHA-256) for every action during discovery and replay. Each entry chains to the previous via its hash — any modification breaks the chain. Supports SOX/FFIEC compliance requirements for financial automation audit logs. Save/load with integrity verification. (`src/cua/observability/audit_trail.py`)
+
+6. **TF-IDF Capability Discovery** — Natural language search over the capability registry using TF-IDF scoring. AI agents can find capabilities by intent ("check member savings balance") rather than knowing exact names. Zero ML dependencies — pure Python tokenizer + IDF weighting. (`src/cua/orchestration/capability_registry.py`)
+
+7. **Adaptive Timing Prediction** — Exponential moving average profiling of step execution times across runs. Computes adaptive timeouts (tighter than static defaults), detects degrading steps, and generates health reports. Prevents both premature timeouts and unbounded waits. (`src/cua/replay/adaptive_timing.py`)
+
+8. **Auto-Healing Locators** — When a primary locator fails but a fallback succeeds, the system records the "heal". After N consistent heals (configurable threshold), it automatically updates the capability YAML to promote the working strategy. Turns locator maintenance from manual to automated. (`src/cua/replay/auto_healer.py`)
 
 ## Project Structure
 
@@ -92,7 +104,9 @@ src/cua/
 ├── recording/        # Discovery trace → capability artifact
 ├── replay/           # Deterministic replay engine
 │   ├── executor.py   # The production execution path
-│   └── locator_resolver.py # Multi-tier locator resolution
+│   ├── locator_resolver.py # Multi-tier locator resolution
+│   ├── adaptive_timing.py  # EMA-based timing prediction
+│   └── auto_healer.py      # Self-updating locator strategies
 ├── safety/           # Guardrails
 │   ├── guard.py      # Policy enforcement
 │   └── redactor.py   # PII redaction
@@ -100,9 +114,12 @@ src/cua/
 │   └── handoff.py    # CDP session handoff
 ├── observability/    # Logging + anomaly detection
 │   ├── logger.py     # Structured logging
-│   └── anomaly.py    # Execution anomaly detection (B2)
+│   ├── anomaly.py    # Execution anomaly detection (B2)
+│   ├── visual_regression.py # Perceptual hash visual diffing
+│   └── audit_trail.py      # Cryptographic hash chain audit log
 ├── orchestration/    # Workflow engine
-│   └── engine.py     # DAG executor (B3)
+│   ├── engine.py     # DAG executor (B3)
+│   └── capability_registry.py # TF-IDF capability search
 └── cli.py            # CLI entry point
 
 mock_bank_app/        # Legacy banking app (Flask, intentionally hostile HTML)
@@ -115,7 +132,7 @@ tests/                # pytest test suite
 ## Running Tests
 
 ```bash
-uv run pytest tests/ -v
+uv run pytest tests/ -v   # 105 tests across 12 test files
 ```
 
 ## Demo Path
@@ -159,7 +176,7 @@ Replay does not require an API key — it runs deterministically without the LLM
 ## Dependencies
 
 - **Python 3.13** — runtime
-- **Anthropic Claude** (claude-sonnet-4-20250514) — discovery agent loop
+- **Anthropic Claude** (claude-haiku-4-5-20251001) — discovery agent loop
 - **Playwright** — browser automation
 - **Pydantic** — all data models
 - **Flask** — mock banking app

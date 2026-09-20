@@ -1,0 +1,185 @@
+{
+  "run_id": "857bcb18-7d30-4398-b57a-c76c5dd5014a",
+  "capability_id": "discovery",
+  "events": [
+    {
+      "event": "discovery_start",
+      "timestamp": "2026-09-20T05:24:26.722387+00:00",
+      "goal": "Look up member M1001 and read their savings balance",
+      "target_url": "http://localhost:5001"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_0",
+      "success": true,
+      "duration_ms": 5048.353910446167,
+      "timestamp": "2026-09-20T05:24:34.545976+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_1",
+      "success": true,
+      "duration_ms": 10019.68002319336,
+      "timestamp": "2026-09-20T05:24:46.083268+00:00",
+      "tool": "type_text"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_2",
+      "success": true,
+      "duration_ms": 5011.399984359741,
+      "timestamp": "2026-09-20T05:24:52.206723+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_3",
+      "success": true,
+      "duration_ms": 10012.362957000732,
+      "timestamp": "2026-09-20T05:25:03.429039+00:00",
+      "tool": "type_text"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_4",
+      "success": true,
+      "duration_ms": 5021.317958831787,
+      "timestamp": "2026-09-20T05:25:09.893889+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_5",
+      "success": true,
+      "duration_ms": 1.0831356048583984,
+      "timestamp": "2026-09-20T05:25:11.056452+00:00",
+      "tool": "wait_for_page"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_6",
+      "success": true,
+      "duration_ms": 4.8980712890625,
+      "timestamp": "2026-09-20T05:25:12.306038+00:00",
+      "tool": "press_key"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_7",
+      "success": true,
+      "duration_ms": 0.9708404541015625,
+      "timestamp": "2026-09-20T05:25:15.409534+00:00",
+      "tool": "wait_for_page"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_8",
+      "success": true,
+      "duration_ms": 5017.190217971802,
+      "timestamp": "2026-09-20T05:25:22.304774+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_9",
+      "success": true,
+      "duration_ms": 10009.521007537842,
+      "timestamp": "2026-09-20T05:25:34.149101+00:00",
+      "tool": "type_text"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_10",
+      "success": true,
+      "duration_ms": 5011.137962341309,
+      "timestamp": "2026-09-20T05:25:40.503564+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_11",
+      "success": true,
+      "duration_ms": 10009.448051452637,
+      "timestamp": "2026-09-20T05:25:51.672134+00:00",
+      "tool": "type_text"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_12",
+      "success": true,
+      "duration_ms": 5.089998245239258,
+      "timestamp": "2026-09-20T05:25:52.750299+00:00",
+      "tool": "press_key"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_13",
+      "success": true,
+      "duration_ms": 528.2018184661865,
+      "timestamp": "2026-09-20T05:25:54.909398+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_14",
+      "success": true,
+      "duration_ms": 5022.276878356934,
+      "timestamp": "2026-09-20T05:26:02.281070+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_15",
+      "success": true,
+      "duration_ms": 10008.009910583496,
+      "timestamp": "2026-09-20T05:26:13.743208+00:00",
+      "tool": "type_text"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_16",
+      "success": true,
+      "duration_ms": 2.5510787963867188,
+      "timestamp": "2026-09-20T05:26:14.997875+00:00",
+      "tool": "press_key"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_17",
+      "success": true,
+      "duration_ms": 532.2268009185791,
+      "timestamp": "2026-09-20T05:26:17.104590+00:00",
+      "tool": "click_element"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_18",
+      "success": true,
+      "duration_ms": 0.0050067901611328125,
+      "timestamp": "2026-09-20T05:26:18.898110+00:00",
+      "tool": "extract_data"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_19",
+      "success": true,
+      "duration_ms": 0.0021457672119140625,
+      "timestamp": "2026-09-20T05:26:20.595860+00:00",
+      "tool": "mark_goal_complete"
+    },
+    {
+      "event": "run_complete",
+      "status": "success",
+      "timestamp": "2026-09-20T05:26:20.596071+00:00",
+      "steps": 20,
+      "outputs": [
+        "member_id",
+        "member_name",
+        "savings_account_id",
+        "savings_balance",
+        "savings_status"
+      ]
+    }
+  ]
+}
