@@ -15,6 +15,5 @@ venv/
 *.so
 .DS_Store
 evidence/discovery_screenshots/
-evidence/*.json
 !evidence/.gitkeep
 node_modules/

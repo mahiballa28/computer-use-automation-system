@@ -1,0 +1,95 @@
+{
+  "run_id": "c4f471e1-1e25-401d-ab0c-7a8c04e0f5f8",
+  "capability_id": "cap-lookup-balance-001",
+  "events": [
+    {
+      "event": "replay_start",
+      "timestamp": "2026-09-20T05:32:09.740788+00:00",
+      "capability": "lookup_member_balance",
+      "params": [
+        "member_id"
+      ]
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_00",
+      "action": "type",
+      "description": "Type operator username into the login field",
+      "timestamp": "2026-09-20T05:32:22.258107+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_00",
+      "success": true,
+      "duration_ms": 7027.21381187439,
+      "timestamp": "2026-09-20T05:32:29.286551+00:00",
+      "strategy": "label_proximity"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_01",
+      "action": "click",
+      "description": "Click the Sign In button to log in",
+      "timestamp": "2026-09-20T05:32:41.349872+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_01",
+      "success": true,
+      "duration_ms": 565.1471614837646,
+      "timestamp": "2026-09-20T05:32:41.929715+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_02",
+      "action": "click",
+      "description": "Click Member Search link in the navigation menu",
+      "timestamp": "2026-09-20T05:32:53.936388+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_02",
+      "success": true,
+      "duration_ms": 556.8099021911621,
+      "timestamp": "2026-09-20T05:32:54.506421+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_03",
+      "action": "type",
+      "description": "Type the member ID into the search field",
+      "timestamp": "2026-09-20T05:33:06.511805+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_03",
+      "success": true,
+      "duration_ms": 7013.535976409912,
+      "timestamp": "2026-09-20T05:33:13.527398+00:00",
+      "strategy": "label_proximity"
+    },
+    {
+      "event": "step_start",
+      "step_id": "step_04",
+      "action": "click",
+      "description": "Click the Search button to find the member",
+      "timestamp": "2026-09-20T05:33:28.534425+00:00"
+    },
+    {
+      "event": "step_complete",
+      "step_id": "step_04",
+      "success": true,
+      "duration_ms": 551.6080856323242,
+      "timestamp": "2026-09-20T05:33:29.100571+00:00",
+      "strategy": "accessibility"
+    },
+    {
+      "event": "error_handler_triggered",
+      "timestamp": "2026-09-20T05:33:29.101981+00:00",
+      "handler": "member_not_found",
+      "action": "report_outcome"
+    }
+  ]
+}
