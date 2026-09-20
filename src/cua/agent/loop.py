@@ -306,17 +306,48 @@ class AgentLoop:
         name = input.get("name", "")
         text = input.get("text", "")
 
+        # Strategy 1: fill by role + accessible name
         try:
             await self._surface.fill_by_role(role, name, text)
             return f"Typed '{text}' into {role} '{name}'."
+        except Exception:
+            pass
+
+        # Strategy 2: find by label text proximity
+        try:
+            locator = self._surface.page.get_by_label(name, exact=False)
+            await locator.fill(text, timeout=5_000)
+            return f"Typed '{text}' into field labeled '{name}' (label fallback)."
+        except Exception:
+            pass
+
+        # Strategy 3: find input near text content
+        try:
+            clean_name = name.rstrip(":").strip()
+            # Find the text node, then the nearest input
+            locator = self._surface.page.locator(
+                f"td:has(font:text-is('{name}')) + td input, "
+                f"td:has-text('{clean_name}') + td input, "
+                f"input[name*='{clean_name.lower()}']"
+            )
+            await locator.first.fill(text, timeout=5_000)
+            return f"Typed '{text}' into input near '{name}' (proximity fallback)."
+        except Exception:
+            pass
+
+        # Strategy 4: try all visible text inputs in order
+        try:
+            inputs = self._surface.page.locator("input[type='text'], input:not([type])")
+            count = await inputs.count()
+            for i in range(count):
+                el = inputs.nth(i)
+                if await el.is_visible():
+                    await el.fill(text, timeout=3_000)
+                    return f"Typed '{text}' into visible text input #{i} (scan fallback)."
         except Exception as e:
-            # Try by label
-            try:
-                locator = self._surface.page.get_by_label(name)
-                await locator.fill(text, timeout=5_000)
-                return f"Typed '{text}' into field labeled '{name}' (fallback)."
-            except Exception:
-                return f"Error: Could not type into {role} '{name}'. Error: {e}"
+            return f"Error: Could not type into {role} '{name}'. All strategies failed. Last error: {e}"
+
+        return f"Error: Could not find any suitable input for '{name}'."
 
     async def _do_select(self, input: dict[str, Any]) -> str:
         role = input.get("role", "")

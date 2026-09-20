@@ -23,7 +23,7 @@ class Settings(BaseSettings):
         description="Anthropic API key for Claude",
     )
     anthropic_model: str = Field(
-        default="claude-sonnet-4-20250514",
+        default="claude-haiku-4-5-20251001",
         description="Claude model ID for the agent loop",
     )
 

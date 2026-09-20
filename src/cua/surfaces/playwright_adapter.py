@@ -305,13 +305,45 @@ class PlaywrightAdapter:
             return None
 
     async def find_by_label(self, label_text: str, timeout_ms: int = 5_000) -> str | None:
-        """Find an input element by its associated label text."""
+        """Find an input element by its associated label text.
+
+        Tries multiple strategies to handle legacy HTML:
+        1. Standard <label> association
+        2. Table-based proximity (td with label text + adjacent td input)
+        3. Text proximity (element near text matching the label)
+        """
+        # Strategy 1: standard label
         try:
-            locator = self.page.get_by_label(label_text)
-            await locator.wait_for(timeout=timeout_ms, state="visible")
+            locator = self.page.get_by_label(label_text, exact=False)
+            await locator.wait_for(timeout=min(timeout_ms, 2_000), state="visible")
             return f"label={json.dumps(label_text)}"
         except Exception:
-            return None
+            pass
+
+        # Strategy 2: table-based proximity (legacy HTML pattern)
+        clean_label = label_text.rstrip(":").strip()
+        selectors = [
+            f"td:has(font:text-is('{label_text}')) + td input",
+            f"td:has-text('{clean_label}') + td input",
+            f"td:has-text('{label_text}') + td input",
+        ]
+        for sel in selectors:
+            try:
+                locator = self.page.locator(sel).first
+                await locator.wait_for(timeout=min(timeout_ms, 2_000), state="visible")
+                return sel
+            except Exception:
+                continue
+
+        # Strategy 3: input near text using Playwright's locator chaining
+        try:
+            locator = self.page.locator(f"input[name*='{clean_label.lower()}']").first
+            await locator.wait_for(timeout=min(timeout_ms, 2_000), state="visible")
+            return f"input[name*='{clean_label.lower()}']"
+        except Exception:
+            pass
+
+        return None
 
     async def click_by_role(self, role: str, name: str, timeout_ms: int = 5_000) -> None:
         """Click an element using Playwright's role-based locator."""

@@ -19,9 +19,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import logging
+
 import structlog
 
 from cua.safety.redactor import Redactor
+
+_NAME_TO_LEVEL: dict[str, int] = {
+    "critical": logging.CRITICAL,
+    "error": logging.ERROR,
+    "warning": logging.WARNING,
+    "warn": logging.WARNING,
+    "info": logging.INFO,
+    "debug": logging.DEBUG,
+    "notset": logging.NOTSET,
+}
 
 
 def configure_logging(
@@ -53,7 +65,7 @@ def configure_logging(
     structlog.configure(
         processors=processors,
         wrapper_class=structlog.make_filtering_bound_logger(
-            structlog.get_level_from_name(log_level)
+            _NAME_TO_LEVEL.get(log_level.lower(), logging.INFO)
         ),
         context_class=dict,
         logger_factory=structlog.PrintLoggerFactory(

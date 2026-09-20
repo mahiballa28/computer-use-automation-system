@@ -437,11 +437,18 @@ class ReplayExecutor:
 
         elif step.action == ActionType.EXTRACT:
             output_name = step.parameters.get("output_name", "")
+            extract_pattern = step.parameters.get("pattern", "")
+            extract_label = step.parameters.get("label", "")
+
             if selector:
                 value = await self._surface.extract_text(selector, step.timeout_ms)
+            elif extract_label or output_name:
+                # Smart extraction: find value near a label on the page
+                label_to_find = extract_label or output_name.replace("_", " ").title()
+                value = await self._extract_by_label(label_to_find, extract_pattern)
             else:
-                # Extract from page text
                 value = await self._surface.get_page_text()
+
             if output_name:
                 extracted[output_name] = value
 
@@ -494,6 +501,50 @@ class ReplayExecutor:
             await page.get_by_label(label).fill(text, timeout=timeout_ms)
         else:
             await page.fill(selector, text, timeout=timeout_ms)
+
+    async def _extract_by_label(self, label: str, pattern: str = "") -> str:
+        """Extract a value from the page by finding it near a label.
+
+        Handles common legacy HTML patterns: table rows with label + value cells,
+        definition lists, and label-value pairs.
+        """
+        import re
+
+        page = self._surface.page
+        page_text = await self._surface.get_page_text()
+
+        # Try to find "Label: Value" or "Label\tValue" patterns
+        for separator in [":\t", ":\n", ": ", "\t"]:
+            for line in page_text.split("\n"):
+                if label.lower().replace("_", " ") in line.lower():
+                    parts = line.split(separator, 1)
+                    if len(parts) == 2:
+                        value = parts[1].strip()
+                        if value:
+                            return value
+
+        # Try structured extraction via table cells
+        try:
+            selectors = [
+                f"td:has-text('{label}') + td",
+                f"th:has-text('{label}') + td",
+                f"dt:has-text('{label}') + dd",
+            ]
+            for sel in selectors:
+                locator = page.locator(sel).first
+                if await locator.count() > 0:
+                    return (await locator.inner_text()).strip()
+        except Exception:
+            pass
+
+        # If a regex pattern was provided, extract from full text
+        if pattern:
+            match = re.search(pattern, page_text)
+            if match:
+                return match.group(1) if match.groups() else match.group(0)
+
+        # Fallback: return the label's context
+        return f"[extraction_pending:{label}]"
 
     def _interpolate(self, template: str, values: dict[str, Any]) -> str:
         """Replace {{param_name}} placeholders with actual values."""

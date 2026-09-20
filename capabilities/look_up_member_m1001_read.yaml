@@ -1,0 +1,528 @@
+id: 4cc205fc-8604-4838-900a-5c6b62f21b0d
+version: 1
+name: look_up_member_m1001_read
+description: Look up member M1001 and read their savings balance
+surface:
+  surface_type: web
+  entry_point: http://localhost:5001
+  app_id: null
+  tenant_id: null
+  app_version: null
+input_parameters: []
+outputs:
+- name: savings_balance
+  type: string
+  description: Member M1001's savings account balance shown in the Accounts table
+  extraction_step_id: step_18
+  sensitive: false
+steps:
+- id: step_00
+  description: Click on the Username input field to enter login credentials
+  action: click
+  target:
+    description: Click on the Username input field to enter login credentials
+    strategies:
+    - type: accessibility
+      value: textbox[name='Username']
+      attributes:
+        role: textbox
+        name: Username
+      confidence: 0.95
+    - type: text_content
+      value: Username
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Username
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15145
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_01
+  description: Enter test username for login
+  action: type
+  target:
+    description: Enter test username for login
+    strategies:
+    - type: accessibility
+      value: textbox[name='Username']
+      attributes:
+        role: textbox
+        name: Username
+      confidence: 0.95
+    - type: text_content
+      value: Username
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Username
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters:
+    text: admin
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 30059
+  risk_level: cautious
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_02
+  description: Click on the Password input field to enter login credentials
+  action: click
+  target:
+    description: Click on the Password input field to enter login credentials
+    strategies:
+    - type: accessibility
+      value: textbox[name='Password']
+      attributes:
+        role: textbox
+        name: Password
+      confidence: 0.95
+    - type: text_content
+      value: Password
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Password
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15034
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_03
+  description: Enter test password for login
+  action: type
+  target:
+    description: Enter test password for login
+    strategies:
+    - type: accessibility
+      value: textbox[name='Password']
+      attributes:
+        role: textbox
+        name: Password
+      confidence: 0.95
+    - type: text_content
+      value: Password
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Password
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters:
+    text: password
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 30037
+  risk_level: cautious
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_04
+  description: Click the Login button to submit credentials
+  action: click
+  target:
+    description: Click the Login button to submit credentials
+    strategies:
+    - type: accessibility
+      value: button[name='Login']
+      attributes:
+        role: button
+        name: Login
+      confidence: 0.95
+    - type: text_content
+      value: Login
+      attributes: {}
+      confidence: 0.8
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15063
+  risk_level: risky
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_05
+  description: 'Action: wait_for_page'
+  action: wait
+  target: null
+  parameters:
+    timeout_seconds: 5
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_06
+  description: Press Enter to submit the login form
+  action: press_key
+  target: null
+  parameters:
+    key: Enter
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_07
+  description: 'Action: wait_for_page'
+  action: wait
+  target: null
+  parameters:
+    timeout_seconds: 5
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_08
+  description: Click on Username field to clear and re-enter credentials
+  action: click
+  target:
+    description: Click on Username field to clear and re-enter credentials
+    strategies:
+    - type: accessibility
+      value: textbox[name='Username']
+      attributes:
+        role: textbox
+        name: Username
+      confidence: 0.95
+    - type: text_content
+      value: Username
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Username
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15051
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_09
+  description: Enter test username
+  action: type
+  target:
+    description: Enter test username
+    strategies:
+    - type: accessibility
+      value: textbox[name='Username']
+      attributes:
+        role: textbox
+        name: Username
+      confidence: 0.95
+    - type: text_content
+      value: Username
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Username
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters:
+    text: test
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 30028
+  risk_level: cautious
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_10
+  description: Click on Password field to enter password
+  action: click
+  target:
+    description: Click on Password field to enter password
+    strategies:
+    - type: accessibility
+      value: textbox[name='Password']
+      attributes:
+        role: textbox
+        name: Password
+      confidence: 0.95
+    - type: text_content
+      value: Password
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Password
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15033
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_11
+  description: Enter test password
+  action: type
+  target:
+    description: Enter test password
+    strategies:
+    - type: accessibility
+      value: textbox[name='Password']
+      attributes:
+        role: textbox
+        name: Password
+      confidence: 0.95
+    - type: text_content
+      value: Password
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: Password
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters:
+    text: test
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 30028
+  risk_level: cautious
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_12
+  description: Press Enter to submit the login form
+  action: press_key
+  target: null
+  parameters:
+    key: Enter
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_13
+  description: Click on Search Members link to search for member M1001
+  action: click
+  target:
+    description: Click on Search Members link to search for member M1001
+    strategies:
+    - type: accessibility
+      value: link[name='Search Members']
+      attributes:
+        role: link
+        name: Search Members
+      confidence: 0.95
+    - type: text_content
+      value: Search Members
+      attributes: {}
+      confidence: 0.8
+    fingerprint_id: null
+  parameters: {}
+  checkpoint:
+    description: Page navigated to http://localhost:5001/members/search
+    type: url_match
+    value: http://localhost:5001/members/search
+    timeout_ms: 5000
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_14
+  description: Click on the Member ID or Name search field
+  action: click
+  target:
+    description: Click on the Member ID or Name search field
+    strategies:
+    - type: accessibility
+      value: textbox[name='Member ID or Name:']
+      attributes:
+        role: textbox
+        name: 'Member ID or Name:'
+      confidence: 0.95
+    - type: text_content
+      value: 'Member ID or Name:'
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: 'Member ID or Name:'
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters: {}
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 15066
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_15
+  description: Enter member ID M1001 to search for the member
+  action: type
+  target:
+    description: Enter member ID M1001 to search for the member
+    strategies:
+    - type: accessibility
+      value: textbox[name='Member ID or Name:']
+      attributes:
+        role: textbox
+        name: 'Member ID or Name:'
+      confidence: 0.95
+    - type: text_content
+      value: 'Member ID or Name:'
+      attributes: {}
+      confidence: 0.8
+    - type: label_proximity
+      value: 'Member ID or Name:'
+      attributes: {}
+      confidence: 0.7
+    fingerprint_id: null
+  parameters:
+    text: M1001
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 30024
+  risk_level: cautious
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_16
+  description: Press Enter to submit the member search
+  action: press_key
+  target: null
+  parameters:
+    key: Enter
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_17
+  description: Click on View Details link to see member M1001's account information
+  action: click
+  target:
+    description: Click on View Details link to see member M1001's account information
+    strategies:
+    - type: accessibility
+      value: link[name='View Details']
+      attributes:
+        role: link
+        name: View Details
+      confidence: 0.95
+    - type: text_content
+      value: View Details
+      attributes: {}
+      confidence: 0.8
+    fingerprint_id: null
+  parameters: {}
+  checkpoint:
+    description: Page navigated to http://localhost:5001/members/M1001
+    type: url_match
+    value: http://localhost:5001/members/M*
+    timeout_ms: 5000
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+- id: step_18
+  description: Member M1001's savings account balance shown in the Accounts table
+  action: extract
+  target: null
+  parameters:
+    output_name: savings_balance
+    value_pattern: .*
+  checkpoint: null
+  error_handlers: []
+  timeout_ms: 5000
+  risk_level: safe
+  on_error: fail
+  retry_config: null
+  wait_before_ms: 0
+success_condition:
+  description: Verify the goal page is reached
+  type: page_title
+  value: Meridian Credit Union - Core Banking System
+  timeout_ms: 5000
+error_handlers:
+- name: member_not_found
+  description: Member search returns no results
+  detection:
+    description: No results message is visible
+    type: text_present
+    value: No members found
+    timeout_ms: 5000
+  action: report_outcome
+  message_template: Member not found for the given search criteria
+  max_retries: 3
+- name: session_expired
+  description: Session has timed out, redirect to login
+  detection:
+    description: Login page is displayed
+    type: text_present
+    value: Session expired
+    timeout_ms: 5000
+  action: escalate
+  message_template: Session expired during execution
+  max_retries: 3
+- name: permission_denied
+  description: Access denied to the requested resource
+  detection:
+    description: Permission denied error is shown
+    type: text_present
+    value: Access Denied
+    timeout_ms: 5000
+  action: report_outcome
+  message_template: 'Permission denied: {error_detail}'
+  max_retries: 3
+- name: validation_error
+  description: Form validation error
+  detection:
+    description: Validation error message visible
+    type: text_present
+    value: required
+    timeout_ms: 5000
+  action: fail
+  message_template: 'Validation error: {error_detail}'
+  max_retries: 3
+approval_state: draft
+confidence: null
+created_at: '2026-09-20T05:26:20.603480Z'
+updated_at: '2026-09-20T05:26:20.603484Z'
+recorded_from_run_id: 2fc25a04-594b-46e4-9a47-aa20bf00b8be
+base_capability_id: null
+tags: []
