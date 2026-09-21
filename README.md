@@ -131,7 +131,7 @@ Real evidence from a completed discovery + replay cycle is committed in `evidenc
 uv run pytest tests/ -v
 ```
 
-105 tests across 12 test files. All tests run without an API key and without a running browser — external dependencies are mocked at the boundary.
+105 tests across 10 test files. All tests run without an API key and without a running browser — external dependencies are mocked at the boundary.
 
 Test coverage includes: artifact schema validation, multi-tier locator resolution, replay engine execution, safety policy enforcement, PII redaction, anomaly detection, visual regression hashing, audit trail integrity, capability search, adaptive timing, auto-healing locators, and workflow DAG validation.
 
@@ -247,7 +247,7 @@ mock_bank_app/             # Legacy banking app (Flask, intentionally hostile HT
 policies/                  # Safety policy YAML files
 capabilities/              # Saved capability artifacts
 evidence/                  # Discovery + replay evidence logs
-tests/                     # 105 tests across 12 test files
+tests/                     # 105 tests across 10 test files
 ```
 
 ---
