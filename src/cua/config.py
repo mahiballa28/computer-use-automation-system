@@ -17,10 +17,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Anthropic API
-    anthropic_api_key: SecretStr = Field(
-        default=None,  # type: ignore[assignment]
-        description="Anthropic API key for Claude",
+    # Anthropic API (only required for discovery, not replay)
+    anthropic_api_key: SecretStr | None = Field(
+        default=None,
+        description="Anthropic API key for Claude (required only for discovery)",
     )
     anthropic_model: str = Field(
         default="claude-haiku-4-5-20251001",
